@@ -38,7 +38,7 @@ class GPT2LitModel(pl.LightningModule):
 
         return {"loss": loss, "ppl_step": ppl}
 
-    def training_epoch_end(self, outputs):
+    def on_training_epoch_end(self, outputs):
         if self.save_model_every > 0:
             self.transformer.save_pretrained(self.checkpoint)
 

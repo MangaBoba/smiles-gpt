@@ -16,7 +16,7 @@ import torch.nn.functional as F
 from torchmetrics import AUROC, AveragePrecision
 from transformers import GPT2Model, GPT2PreTrainedModel
 from transformers.modeling_outputs import SequenceClassifierOutputWithPast
-from transformers.adapters.model_mixin import ModelWithHeadsAdaptersMixin
+from adapters.model_mixin import ModelWithHeadsAdaptersMixin
 
 
 @dataclass
@@ -276,13 +276,13 @@ class ClassifierLitModel(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         return self.step(batch, batch_idx, self.train_roc, self.train_prc)
 
-    def training_epoch_end(self, outputs):
+    def on_training_epoch_end(self, outputs):
         self.epoch_end(outputs, self.train_roc, self.train_prc, "train")
 
     def validation_step(self, batch, batch_idx):
         return self.step(batch, batch_idx, self.val_roc, self.val_prc)
 
-    def validation_epoch_end(self, outputs):
+    def on_validation_epoch_end(self, outputs):
         self.epoch_end(outputs, self.val_roc, self.val_prc, "val")
 
     def test_step(self, batch, batch_idx):
@@ -327,13 +327,13 @@ class RegressorLitModel(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         return self.step(batch, batch_idx)
 
-    def training_epoch_end(self, outputs):
+    def on_training_epoch_end(self, outputs):
         self.epoch_end(outputs, "train")
 
     def validation_step(self, batch, batch_idx):
         return self.step(batch, batch_idx)
 
-    def validation_epoch_end(self, outputs):
+    def on_validation_epoch_end(self, outputs):
         self.epoch_end(outputs, "val")
 
     def test_step(self, batch, batch_idx):
